@@ -19,8 +19,16 @@ class ProjectsController < ApplicationController
 end
 
 class ProjectsIndexWorker
+  include AsyncResponse::Workers::Sidekiq
+
   def self.perform_async(job_id)
-    # async stuff
+    new.perform(job_id)
+  end
+
+  def perform(job_id)
+    response_for(job_id) do |response|
+      { job_a: 1 }
+    end
   end
 end
 

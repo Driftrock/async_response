@@ -23,5 +23,22 @@ module AsyncResponse
     def expired?
       expires_at < Time.now
     end
+
+    def finished!
+      increment_percentage(100)
+      self.status = :finished
+      save!
+    end
+
+    def increment_percentage(increment)
+      total = (percentage_completion || 0) + increment
+      total = [[total, 100].min, 0].max
+      self.percentage_completion = total
+    end
+
+    def increment_percentage!(increment)
+      increment_percentage(increment)
+      save!
+    end
   end
 end

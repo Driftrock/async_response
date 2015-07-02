@@ -24,4 +24,20 @@ RSpec.describe ProjectsController, type: :controller do
       )
     end
   end
+
+  context 'when there is no complete job' do
+    it 'renders the job data' do
+      get :index, format: :json
+      get :index, format: :json
+
+      expect(response.body).to eq(
+        {
+          status: 'finished',
+          percentage_completion: 100,
+          data: { job_a: 1 },
+          error: nil
+        }.to_json
+      )
+    end
+  end
 end
