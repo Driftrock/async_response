@@ -6,7 +6,6 @@ PATH
       jquery-rails
       rails (>= 4.0.0)
       sidekiq
-      sidekiq
 
 GEM
   remote: https://rubygems.org/
