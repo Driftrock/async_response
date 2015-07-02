@@ -7,6 +7,7 @@
     %th Status
     %th Type
     %th Key
+    %th Params
     %th Expires at
     %th
 
@@ -16,6 +17,7 @@
       %td= job.status.titleize
       %td= job.job_type
       %td= job.job_key
+      %td= job.params
       %td= job.expires_at
 
       %td{ align: 'right' }
