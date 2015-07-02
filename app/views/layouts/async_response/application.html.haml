@@ -1,0 +1,28 @@
+!!!
+%html
+  %head
+    %title AsyncResponse
+    = stylesheet_link_tag "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    = stylesheet_link_tag "async_response/application", media: "all"
+    = csrf_meta_tags
+
+  %body
+    .container
+      .row
+        .col-sm-12
+          = yield
+
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"
+    = javascript_include_tag "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+    = javascript_include_tag "async_response/application"
+    = content_for :after_javascript
+
+    .modal.fade
+      .modal-dialog
+        .modal-content
+          .modal-header
+            .modal-title
+              Show Response
+          .modal-body
+            #showResponseHolder
+

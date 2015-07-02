@@ -1,0 +1,38 @@
+.page-header
+  %h1 Async Responses
+
+%table.table
+  %tr
+    %th Job ID
+    %th Status
+    %th Type
+    %th Key
+    %th Expires at
+    %th
+
+  - jobs.each do |job|
+    %tr{ class: job.status }
+      %td= job.id
+      %td= job.status.titleize
+      %td= job.job_type
+      %td= job.job_key
+      %td= job.expires_at
+
+      %td{ align: 'right' }
+        - if job.finished?
+          = link_to 'Data', '#',
+            class: 'btn btn-sm btn-default btn-show',
+            data: { id: job.id, content: 'data' }
+        - elsif job.errored?
+          = link_to 'Error', '#',
+            class: 'btn btn-sm btn-default btn-show',
+            data: { id: job.id, content: 'error' }
+
+        = link_to 'Delete', async_response.response_path(job.id),
+          method: :delete,
+          class: 'btn btn-sm btn-danger',
+          data: { confirm: 'Are you sure?' }
+
+- content_for :after_javascript do
+  :javascript
+    var responses = new Responses("#{async_response.responses_path}");
