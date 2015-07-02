@@ -7,7 +7,7 @@ RSpec.describe ProjectsController, type: :controller do
         :job, :finished,
         data: { a: 1 },
         job_type: 'ProjectsIndexWorker',
-        job_key: 'projects_index'
+        job_key: Digest::SHA1.hexdigest('projects_index')
       )
     end
 

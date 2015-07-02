@@ -14,13 +14,14 @@ module AsyncResponse
     private
 
     def async_job
-      @async_job ||= AsyncResponse::Job.valid_job(job_type, job_key)
+      @async_job ||= AsyncResponse::Job.valid_job(job_type,
+                                                  hashed_job_key)
     end
 
     def create_job(params)
       @new_job ||= AsyncResponse::Job.create!(
         job_type: job_type,
-        job_key: job_key,
+        job_key: hashed_job_key,
         expires_at: expires_at,
         params: params
       )
@@ -44,6 +45,11 @@ module AsyncResponse
 
     def schedule_job(job)
       worker_class.perform_async(job.id)
+    end
+
+    def hashed_job_key
+      joined_job_key = job_key.join if job_key.respond_to?(:join)
+      Digest::SHA1.hexdigest(joined_job_key || job_key)
     end
   end
 end

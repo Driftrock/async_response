@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :job, class: AsyncResponse::Job do
     job_type 'DummyWorkerClass'
-    job_key 'test'
+    job_key Digest::SHA1.hexdigest('test')
     expires_at 5.minutes.from_now
 
     trait :incomplete do
