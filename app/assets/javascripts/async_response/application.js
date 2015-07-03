@@ -23,6 +23,8 @@ var Responses = (function($){
       var showResponseHolder = $('#showResponseHolder'),
           display = content == 'data' ? data.data : data.error;
 
+      if (content == 'params') display = JSON.parse(data.params_json);
+
       showResponseHolder.html(JSON.stringify(display));
 
       $('.modal').modal({show: true});

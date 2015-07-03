@@ -3,11 +3,10 @@
 
 %table.table
   %tr
-    %th Job ID
+    %th ID
     %th Status
     %th Type
     %th Key
-    %th Params
     %th Expires at
     %th
 
@@ -17,10 +16,14 @@
       %td= job.status.titleize
       %td= job.job_type
       %td= job.job_key
-      %td= job.params
-      %td= job.expires_at
+      %td{ nowrap: true }
+        = job.expires_at
 
-      %td{ align: 'right' }
+      %td{ align: 'right', nowrap: true }
+        = link_to 'Params', '#',
+          class: 'btn btn-sm btn-default btn-show',
+          data: { id: job.id, content: 'params' }
+
         - if job.finished?
           = link_to 'Data', '#',
             class: 'btn btn-sm btn-default btn-show',
@@ -30,7 +33,8 @@
             class: 'btn btn-sm btn-default btn-show',
             data: { id: job.id, content: 'error' }
 
-        = link_to 'Delete', async_response.response_path(job.id),
+        = link_to '<span class="glyphicon glyphicon-trash"></span>'.html_safe,
+          async_response.response_path(job.id),
           method: :delete,
           class: 'btn btn-sm btn-danger',
           data: { confirm: 'Are you sure?' }
