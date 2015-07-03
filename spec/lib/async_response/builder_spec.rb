@@ -49,4 +49,14 @@ RSpec.describe AsyncResponse::Builder do
       )
     end
   end
+
+  context 'when job is errored' do
+    let!(:job) { FactoryGirl.create(:job, :errored) }
+
+    it 'creates a new job' do
+      expect {
+        subject.build(params)
+      }.to change(AsyncResponse::Job, :count).by(1)
+    end
+  end
 end

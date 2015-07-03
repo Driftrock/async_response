@@ -8,6 +8,7 @@ module AsyncResponse
       record = where(job_type: type, job_key: key).last
       return nil unless record
       return nil if record.expired?
+      return nil if record.errored?
 
       record
     end
