@@ -13,6 +13,13 @@ module AsyncResponse
       record
     end
 
+    def self.expire!(type, key)
+      record = valid_job(type, key)
+      return nil unless record
+      record.expire!
+      record
+    end
+
     def params=(hash)
       self.params_json = hash.to_json
     end
@@ -23,6 +30,11 @@ module AsyncResponse
 
     def expired?
       expires_at < Time.now
+    end
+
+    def expire!
+      self.expires_at = Time.now - 1.minute
+      save(validate: false)
     end
 
     def finished!

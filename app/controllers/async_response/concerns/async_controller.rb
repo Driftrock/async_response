@@ -15,6 +15,10 @@ module AsyncResponse
 
         render(json: response_json)
       end
+
+      def async_response_expire!(worker_class, job_key: nil)
+        AsyncResponse::Expirer.new(worker_class, job_key).expire!
+      end
     end
   end
 end

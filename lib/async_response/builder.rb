@@ -1,5 +1,6 @@
 module AsyncResponse
   class Builder
+    include AsyncResponse::Helper
     attr_reader :worker_class, :expires_at, :job_key
     def initialize(worker_class, expires_at, job_key)
       @worker_class = worker_class
@@ -39,17 +40,8 @@ module AsyncResponse
       }
     end
 
-    def job_type
-      worker_class.name
-    end
-
     def schedule_job(job)
       worker_class.perform_async(job.id)
-    end
-
-    def hashed_job_key
-      joined_job_key = job_key.join if job_key.respond_to?(:join)
-      Digest::SHA1.hexdigest(joined_job_key || job_key)
     end
   end
 end
