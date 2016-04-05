@@ -40,4 +40,20 @@ RSpec.describe ProjectsController, type: :controller do
       )
     end
   end
+
+  context 'when there is no expiry set' do
+    it 'should still render the job' do
+      get :index, format: :json, no_expiry: true
+      get :index, format: :json, no_expiry: true
+
+      expect(response.body).to eq(
+        {
+          status: 'finished',
+          percentage_completion: 100,
+          data: { job_a: 1 },
+          error: nil
+        }.to_json
+      )
+    end
+  end
 end
