@@ -1,14 +1,15 @@
 module AsyncResponse
   class Job < ActiveRecord::Base
-    enum status: [:started, :running, :finished, :errored]
+    enum status: [:started, :running, :finished, :errored, :shown]
     serialize :data, JSON
     validates :job_type, :expires_at, presence: true
 
     def self.valid_job(type, key)
       record = where(job_type: type, job_key: key).last
       return nil unless record
-      return nil if record.expired?
       return nil if record.errored?
+      # Only care about expiry if the job has finished running
+      return nil if record.complete? && record.expired?
 
       record
     end
@@ -18,6 +19,14 @@ module AsyncResponse
       return nil unless record
       record.expire!
       record
+    end
+
+    def active?
+      started? || running?
+    end
+
+    def complete?
+      shown? || errored?
     end
 
     def params=(hash)

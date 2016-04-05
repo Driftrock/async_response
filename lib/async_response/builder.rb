@@ -9,7 +9,12 @@ module AsyncResponse
     end
 
     def build(params)
-      respond_with(async_job || create_job(params))
+      job = async_job || create_job(params)
+      response = respond_with(job)
+      # Set job as shown, needs to display at least once
+      # before we discount it due to expiry
+      job.shown! if job.finished?
+      response
     end
 
     private
@@ -23,7 +28,7 @@ module AsyncResponse
       @new_job ||= AsyncResponse::Job.create!(
         job_type: job_type,
         job_key: hashed_job_key,
-        expires_at: expires_at,
+        expires_at: expires_at || Time.zone.now,
         params: params
       )
 
@@ -33,7 +38,9 @@ module AsyncResponse
 
     def respond_with(job)
       {
-        status: job.status,
+        # Shown is only internally applicable, indistinguishable
+        # from finished as far as a user is concerned
+        status: job.shown? ? 'finished' : job.status,
         percentage_completion: job.percentage_completion,
         data: job.data,
         error: job.error

@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
       format.json do
         async_response(
           ProjectsIndexWorker,
-          expires_at: 5.minutes.from_now,
+          expires_at: params[:no_expiry] ? nil : 5.minutes.from_now,
           job_key: 'projects_index',
           params: {
             page: 1,
